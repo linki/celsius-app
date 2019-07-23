@@ -93,19 +93,6 @@ class CoinDetails extends Component {
     return {};
   }
 
-  navigateToAllTransactions = () => {
-    const { actions } = this.props;
-    actions.navigateTo("AllTransactions");
-  };
-
-  goToCelPay = () => {
-    const { currency } = this.state;
-    const { actions } = this.props;
-
-    actions.updateFormField("coin", currency.short);
-    actions.navigateTo("CelPayChooseFriend");
-  };
-
   setInterestRate = () => {
     const { interestRates, appSettings } = this.props;
     const coinDetails = this.getCoinDetails();
@@ -117,6 +104,19 @@ class CoinDetails extends Component {
     return interestRate
     }
   }
+
+  navigateToAllTransactions = () => {
+    const { actions } = this.props;
+    actions.navigateTo("AllTransactions");
+  }
+
+  goToCelPay = () => {
+    const { currency } = this.state;
+    const { actions } = this.props;
+
+    actions.updateFormField("coin", currency.short);
+    actions.navigateTo("CelPayChooseFriend");
+  };
 
   render() {
     const { currency } = this.state;
