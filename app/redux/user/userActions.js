@@ -249,15 +249,20 @@ function checkTwoFactor(onSuccess, onError) {
  * @param {Object[]} contacts
  */
 function connectPhoneContacts(contacts) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     dispatch(startApiCall(API.CONNECT_PHONE_CONTACTS));
+    const { activeScreen } = getState().nav
 
-    try {
-      await usersService.connectPhoneContacts(contacts);
-      dispatch({ type: ACTIONS.CONNECT_PHONE_CONTACTS_SUCCESS });
-    } catch (err) {
-      logger.err(err);
-    }
+      try {
+        await usersService.connectPhoneContacts(contacts);
+        dispatch({ type: ACTIONS.CONNECT_PHONE_CONTACTS_SUCCESS });
+
+        if (activeScreen !== 'CelPayChooseFriend') {
+          dispatch(openModal(MODALS.CEL_PAY_INFO_MODAL))
+        }
+      } catch (err) {
+        logger.err(err);
+      }
   };
 }
 
@@ -365,7 +370,7 @@ function getPreviousPinScreen(activeScreen) {
 
 
 /**
- * If user has never been a member, he receives 1CEL and becomes a member
+ * If user has never been a member, he receives 1 CEL and becomes a member
  */
 function getCelsiusMemberStatus() {
   return async dispatch => {
