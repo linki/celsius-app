@@ -247,25 +247,25 @@ function checkTwoFactor(onSuccess, onError) {
 
 /**
  * Saves all contacts from users Phonebook
- * @param {Object[]} contacts
  */
 function connectPhoneContacts() {
   return async (dispatch, getState) => {
     dispatch(startApiCall(API.CONNECT_PHONE_CONTACTS));
     const { data: contacts } = await Contacts.getContactsAsync();
-      try {
-        const wait = ms => new Promise((r)=>setTimeout(r, ms))
-        await wait(5000)
-        await usersService.connectPhoneContacts([contacts[0]]);
-        dispatch({ type: ACTIONS.CONNECT_PHONE_CONTACTS_SUCCESS });
 
-        const { activeScreen } = getState().nav
-        if (activeScreen !== 'CelPayChooseFriend') {
-          dispatch(openModal(MODALS.CELPAY_INFO_MODAL))
-        }
-      } catch (err) {
-        logger.err(err);
+    try {
+      // const wait = ms => new Promise((r)=>setTimeout(r, ms))
+      // await wait(5000)
+      await usersService.connectPhoneContacts(contacts);
+      dispatch({ type: ACTIONS.CONNECT_PHONE_CONTACTS_SUCCESS });
+
+      const { activeScreen } = getState().nav
+      if (activeScreen !== 'CelPayChooseFriend') {
+        dispatch(openModal(MODALS.CEL_PAY_INFO_MODAL))
       }
+    } catch (err) {
+      logger.err(err);
+    }
   };
 }
 

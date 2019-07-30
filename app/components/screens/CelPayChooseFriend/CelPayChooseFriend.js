@@ -217,13 +217,13 @@ class CelPayChooseFriend extends Component {
   };
 
   render() {
-    const { user, kycStatus, celpayCompliance, walletSummary, actions } = this.props;
+    const { contacts, user, kycStatus, celpayCompliance, walletSummary, actions } = this.props;
     const { isLoading } = this.state;
 
     if (kycStatus && !hasPassedKYC()) return <StaticScreen emptyState={{ purpose: EMPTY_STATES.NON_VERIFIED_CELPAY }}/>
     if (!user.celsius_member) return <StaticScreen emptyState={{ purpose: EMPTY_STATES.NON_MEMBER_CELPAY }}/>
     if (!celpayCompliance.allowed) return <StaticScreen emptyState={{ purpose: EMPTY_STATES.COMPLIANCE }} />;
-    if (isLoading) return <ContactsLoader navigateTo={actions.navigateTo} />
+    if (!contacts.friendsWithApp.length && isLoading) return <ContactsLoader navigateTo={actions.navigateTo} />
 
     if (!cryptoUtil.isGreaterThan(walletSummary.total_amount_usd, 0)) return <StaticScreen emptyState={{ purpose: EMPTY_STATES.INSUFFICIENT_FUNDS }} />
 
