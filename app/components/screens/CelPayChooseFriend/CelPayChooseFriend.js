@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Permissions, Contacts } from 'expo';
-import { Image, TouchableOpacity, View, ScrollView, Dimensions } from 'react-native';
+import { Permissions } from 'expo';
+import { Image, TouchableOpacity, View, ScrollView } from 'react-native';
 import * as appActions from '../../../redux/actions';
 
 import RegularLayout from "../../layouts/RegularLayout/RegularLayout";
@@ -10,7 +10,6 @@ import CelText from '../../atoms/CelText/CelText';
 import { requestForPermission, hasPermission } from '../../../utils/device-permissions';
 import STYLES from '../../../constants/STYLES';
 import CelButton from '../../atoms/CelButton/CelButton';
-import Spinner from '../../atoms/Spinner/Spinner';
 import ContactList from '../../molecules/ContactList/ContactList';
 import Separator from '../../atoms/Separator/Separator';
 import Icon from '../../atoms/Icon/Icon';
@@ -21,9 +20,7 @@ import { KYC_STATUSES } from "../../../constants/DATA";
 import logger from "../../../utils/logger-util";
 import cryptoUtil from '../../../utils/crypto-util';
 import { hasPassedKYC } from "../../../utils/user-util";
-import LoadingScreen from "../LoadingScreen/LoadingScreen";
-import API from "../../../constants/API";
-import apiUtil from "../../../utils/api-util";
+import ContactsLoader from "../../atoms/ContactsLoader/ContactsLoader";
 
 const renderEmptyState = ({ onContactImport, onSkip }) => (
   <ScrollView style={{ paddingBottom: 90, paddingTop: 30 }}>
@@ -92,8 +89,7 @@ class CelPayChooseFriend extends Component {
     ];
 
     if (permission) {
-      const { data } = await Contacts.getContactsAsync();
-      await this.setContacts(data);
+      await this.setContacts();
       await this.getContacts();
     }
     const haseFrieds = this.props.contacts && this.props.contacts.friendsWithApp && this.props.contacts.friendsWithApp.length  > 0
@@ -140,7 +136,7 @@ class CelPayChooseFriend extends Component {
   handleContactImport = async () => {
     const { navigation, actions } = this.props;
 
-    const permission = await requestForPermission(Permissions.CONTACTS);
+    const permission = await requestForPermission(Permissions.CONTACTS, {goToSettings: false});
 
     this.setState({
       isLoading: true
@@ -148,8 +144,8 @@ class CelPayChooseFriend extends Component {
 
     if (permission) {
       try {
-        const { data } = await Contacts.getContactsAsync();
-        await this.setContacts(data);
+        // const { data } = await Contacts.getContactsAsync();
+        await this.setContacts();
         await this.getContacts();
       } catch (err) {
         logger.log(err)
@@ -207,54 +203,27 @@ class CelPayChooseFriend extends Component {
           <View style={{ width: '100%' }}>
             <Separator />
           </View>
+
+          { !contacts.friendsWithApp || !contacts.friendsWithApp.length && (
+            <CelButton margin="5 0 5 0" basic onPress={this.handleContactImport}>
+              Import Contacts
+            </CelButton>
+          )}
+
           <ContactList contacts={contacts} onContactPress={this.handleContactPress} />
+
         </View>
     )
   };
 
-  renderLoader = () => {
-    const { actions } = this.props
-    const { height } = Dimensions.get("window")
-
-    return (
-      <RegularLayout fabType={'hide'}>
-        <View style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: 0.8 * height
-        }}>
-          <View>
-            <Image
-              source={require("../../../../assets/images/victory-bear3x.png")}
-              style={{
-                width: 140,
-                height: 140,
-                resizeMode: "contain"
-              }}/>
-          </View>
-
-          <CelText margin="20 0 15 0" align="center" type="H3">Your contacts are being imported. We’ll let you know once this import is complete.</CelText>
-
-          <View style={{ alignSelf: "center" }}>
-            <Spinner size={80} />
-          </View>
-
-          <CelButton margin={'10 0 0 0'} onPress={() => actions.navigateTo('WalletLanding') }>Return to App</CelButton>
-        </View>
-      </RegularLayout>
-    )
-  }
-
   render() {
-    const { user, kycStatus, celpayCompliance, walletSummary } = this.props;
+    const { user, kycStatus, celpayCompliance, walletSummary, actions } = this.props;
     const { isLoading } = this.state;
 
     if (kycStatus && !hasPassedKYC()) return <StaticScreen emptyState={{ purpose: EMPTY_STATES.NON_VERIFIED_CELPAY }}/>
     if (!user.celsius_member) return <StaticScreen emptyState={{ purpose: EMPTY_STATES.NON_MEMBER_CELPAY }}/>
     if (!celpayCompliance.allowed) return <StaticScreen emptyState={{ purpose: EMPTY_STATES.COMPLIANCE }} />;
-    if (isLoading) return <LoadingScreen />
-    if (apiUtil.areCallsInProgress([API.CONNECT_PHONE_CONTACTS])) return this.renderLoader()
+    if (isLoading) return <ContactsLoader navigateTo={actions.navigateTo} />
 
     if (!cryptoUtil.isGreaterThan(walletSummary.total_amount_usd, 0)) return <StaticScreen emptyState={{ purpose: EMPTY_STATES.INSUFFICIENT_FUNDS }} />
 

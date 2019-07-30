@@ -1,4 +1,4 @@
-import { Constants } from "expo";
+import { Constants, Contacts } from "expo";
 import _ from "lodash";
 import moment from "moment";
 
@@ -244,21 +244,24 @@ function checkTwoFactor(onSuccess, onError) {
   };
 }
 
+
 /**
  * Saves all contacts from users Phonebook
  * @param {Object[]} contacts
  */
-function connectPhoneContacts(contacts) {
+function connectPhoneContacts() {
   return async (dispatch, getState) => {
     dispatch(startApiCall(API.CONNECT_PHONE_CONTACTS));
-    const { activeScreen } = getState().nav
-
+    const { data: contacts } = await Contacts.getContactsAsync();
       try {
-        await usersService.connectPhoneContacts(contacts);
+        const wait = ms => new Promise((r)=>setTimeout(r, ms))
+        await wait(5000)
+        await usersService.connectPhoneContacts([contacts[0]]);
         dispatch({ type: ACTIONS.CONNECT_PHONE_CONTACTS_SUCCESS });
 
+        const { activeScreen } = getState().nav
         if (activeScreen !== 'CelPayChooseFriend') {
-          dispatch(openModal(MODALS.CEL_PAY_INFO_MODAL))
+          dispatch(openModal(MODALS.CELPAY_INFO_MODAL))
         }
       } catch (err) {
         logger.err(err);
