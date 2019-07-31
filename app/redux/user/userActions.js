@@ -254,8 +254,6 @@ function connectPhoneContacts() {
     const { data: contacts } = await Contacts.getContactsAsync();
 
     try {
-      // const wait = ms => new Promise((r)=>setTimeout(r, ms))
-      // await wait(5000)
       await usersService.connectPhoneContacts(contacts);
       dispatch({ type: ACTIONS.CONNECT_PHONE_CONTACTS_SUCCESS });
 
