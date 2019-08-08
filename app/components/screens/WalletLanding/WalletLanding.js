@@ -162,13 +162,6 @@ class WalletLanding extends Component {
     }, 5000)
   }
 
-  // setMemberStatusFetchingInterval = () => {
-  //   const { actions } = this.props
-  //
-  //   this.memberStatusFetchingInterval = setInterval(() => {
-  //     actions.getCelsiusMemberStatus()
-  //   }, 5000)
-  // }
 
   handleBackButton = () => {
     const {actions} = this.props;

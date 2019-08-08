@@ -38,7 +38,7 @@ class WalletDetailsCard extends PureComponent {
 
   navigateToDeposit = () => {
     const {actions} = this.props;
-      return actions.navigateTo('Deposit')
+    actions.navigateTo('Deposit')
   };
   openInterestModal = () => this.props.openModal(MODALS.TODAY_INTEREST_RATES_MODAL);
 
