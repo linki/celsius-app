@@ -14,14 +14,19 @@ class AllTransactions extends Component {
     title: 'Transaction history',
     right: 'profile'
   };
-  
+
   render() {
+    const { navigation } = this.props
     const style = AllTransactionsStyle();
+    const transactionType = navigation.getParam('transactionType') || null
 
     return (
       <RegularLayout>
         <View style={style.container}>
-          <TransactionsHistory />
+          <TransactionsHistory
+            filter={ transactionType ? null : false }
+            additionalFilter={{ type: transactionType }}
+          />
         </View>
       </RegularLayout>
     )
