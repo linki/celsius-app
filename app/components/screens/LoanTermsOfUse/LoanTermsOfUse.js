@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, Fragment} from 'react';
 import { Linking } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { connect } from 'react-redux';
@@ -11,6 +11,7 @@ import CelText from '../../atoms/CelText/CelText';
 import RegularLayout from '../../layouts/RegularLayout/RegularLayout';
 import CelButton from "../../atoms/CelButton/CelButton";
 import {MODALS} from "../../../constants/UI";
+import Separator from "../../atoms/Separator/Separator";
 
 // @connect(
 //   state => ({
@@ -26,9 +27,8 @@ class LoanTermsOfUse extends Component {
     title: "Terms and Conditions",
   });
 
-
-
-  handleCopy = () => ({
+  handleCopy = () => (
+    {
       termsPt1: [
         {
           title: null,
@@ -219,6 +219,24 @@ Each Loan is provided solely for use by you, and your application for a Loan is 
       <CelText onPress={() => Linking.openURL(url)}>{copy}</CelText>
     )
 
+  renderToU = () => {
+    const termsOfUse = this.handleCopy()
+
+    // return termsOfUse
+
+    return (
+      termsOfUse.termsPt1.map(
+        (o, i) => (
+          <Fragment key={i}>
+            <Separator text={ o.title } />
+            <CelText type={'H5'}>{ o.copy }</CelText>
+          </Fragment>
+        )
+      )
+    )
+  }
+
+
   render() {
     // const style = LoanTermsOfUseStyle();
 
@@ -230,6 +248,8 @@ Each Loan is provided solely for use by you, and your application for a Loan is 
         >
           Celsius Loan Terms and Conditions
         </CelText>
+
+        { this.renderToU() }
         <CelButton
           onPress={ this.requestButtonHandle }
         >Request Loan</CelButton>
