@@ -45,7 +45,7 @@ class SocialSecurityNumber extends Component {
     const { updatingTaxInfo } = this.state;
     const style = SocialSecurityNumberStyle();
     const ssnArray = user.ssn ? user.ssn.split("-") : {};
-
+    // console.log(user.itin)
     return (
       <View>
         {(isUSCitizen()) ?
@@ -116,28 +116,44 @@ class SocialSecurityNumber extends Component {
           :
           <React.Fragment>
             <View style={style.taxID}>
-              <CelInput margin="20 0 20 0" type="text" field="itin" placeholder="E-International Tax ID Number (optional)"
-                value={formData.itin} error={formErrors.itin} />
+              <CelInput
+                margin="20 0 20 0"
+                type="text"
+                field="itin"
+                placeholder="E-International Tax ID Number (optional)"
+                value={user.itin ? user.itin : formData.itin}
+                error={formErrors.itin} 
+                disabled={!!user.itin}
+                />
             </View>
             <View style={style.nationalID}>
-              <CelInput margin="0 0 30 0" type="text" field="national_id" placeholder="E-National ID Number (optional)"
-                value={formData.national_id} error={formErrors.national_id} />
+              <CelInput
+                margin="0 0 30 0"
+                type="text"
+                field="national_id"
+                placeholder="E-National ID Number (optional)"
+                value={user.national_id ? user.national_id : formData.national_id}
+                error={formErrors.national_id} 
+                disabled={!!user.national_id}
+                multiline
+                numberOfLines={2}
+                />
             </View>
           </React.Fragment>
         }
         <View style={{ flexWrap: 'wrap', alignContent: 'center', justifyContent: 'center', paddingBottom: 20 }}>
 
-          {!user.ssn &&
-          <CelButton
-            onPress={() => onPress()}
-            iconRight={"IconArrowRight"}
-            iconRightHeight={"20"}
-            iconRightWidth={"20"}
-            loading={updatingTaxInfo}
-          >
-            {(isUSCitizen()) ?
-              'Submit SSN' : 'Continue'}
-          </CelButton>
+          {(!user.ssn || !user.national_id) &&
+            <CelButton
+              onPress={() => onPress()}
+              iconRight={"IconArrowRight"}
+              iconRightHeight={"20"}
+              iconRightWidth={"20"}
+              loading={updatingTaxInfo}
+            >
+              {(isUSCitizen()) ?
+                'Submit SSN' : 'Continue'}
+            </CelButton>
           }
         </View>
       </View>
