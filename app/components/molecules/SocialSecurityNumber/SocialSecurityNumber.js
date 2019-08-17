@@ -45,7 +45,7 @@ class SocialSecurityNumber extends Component {
     const { updatingTaxInfo } = this.state;
     const style = SocialSecurityNumberStyle();
     const ssnArray = user.ssn ? user.ssn.split("-") : {};
-    // console.log(user.itin)
+
     return (
       <View>
         {(isUSCitizen()) ?
