@@ -43,7 +43,6 @@ class PersonalInformation extends Component {
     const { actions, formData } = this.props;
     let updateTaxInfo;
     const errors = {};
-    // console.log(formData)
     if (isUSCitizen()) {
       // TODO(ns): this if statement does nothing and is unnecessary, should be removed
       if ((!formData.ssn1 || formData.ssn1.length < 3) || (!formData.ssn2 || formData.ssn2.length < 2) || (!formData.ssn3 || formData.ssn3.length < 4)) {
@@ -78,8 +77,8 @@ class PersonalInformation extends Component {
     const { user, actions, formErrors } = this.props;
     const style = PersonalInformationStyle();
     const dateOfBirth = user.date_of_birth ? user.date_of_birth.split("-") : {};
-    // console.log(user.id, 'user.id')
-    // console.log(user.itin, 'itin')
+    const userSetCountry = user.country !== null
+    
     return (
       <RegularLayout>
         <CelText margin={"0 0 20 0"} align={"center"} weight={"300"} type={"H4"}>To make changes on your personal
@@ -88,16 +87,20 @@ class PersonalInformation extends Component {
             support.</CelText></CelText>
         {isUSCitizen() ? (
           <View>
-            <Separator margin={"10 0 20 0"} color={STYLES.COLORS.DARK_GRAY} opacity={0.2} textOpacity={0.4}
-              text={"SOCIAL SECURITY NUMBER"} />
-
-            {!user.ssn &&
+            {userSetCountry &&
               <View>
-                <CelText margin={"0 0 20 0"} type={"H4"} align={"left"} weight={"300"}>
-                  We are required to collect SSN from all American users. Please provide your SSN to start earning
-                  interest.
-                  This information is encrypted and highly secured.
-              </CelText>
+                <Separator margin={"10 0 20 0"} color={STYLES.COLORS.DARK_GRAY} opacity={0.2} textOpacity={0.4}
+                  text={"SOCIAL SECURITY NUMBER"} />
+
+                {!user.ssn &&
+                  <View>
+                    <CelText margin={"0 0 20 0"} type={"H4"} align={"left"} weight={"300"}>
+                      We are required to collect SSN from all American users. Please provide your SSN to start earning
+                      interest.
+                      This information is encrypted and highly secured.
+                    </CelText>
+                  </View>
+                }
                 <SocialSecurityNumber
                   onPress={() => this.submitTaxpayerInfo()}
                 />
@@ -106,19 +109,19 @@ class PersonalInformation extends Component {
           </View>
         ) :
           <View>
-            <Separator margin={"10 0 20 0"} color={STYLES.COLORS.DARK_GRAY} opacity={0.2} textOpacity={0.4}
-              text={"Taxpayer ID"} />
+            {userSetCountry &&
+              <View>
+                <Separator margin={"10 0 20 0"} color={STYLES.COLORS.DARK_GRAY} opacity={0.2} textOpacity={0.4}
+                  text={"Taxpayer ID"} />
 
-            {/* {!user.national_id && */}
-              <SocialSecurityNumber
-                onPress={() => this.submitTaxpayerInfo()}
-              />
-            {/* } */}
+                <SocialSecurityNumber
+                  onPress={() => this.submitTaxpayerInfo()}
+                />
+              </View>
+            }
           </View>
         }
-        {/* <SocialSecurityNumber
-          onPress={() => this.submitTaxpayerInfo()}
-        /> */}
+      
 
         <Separator margin={"10 0 20 0"} color={STYLES.COLORS.DARK_GRAY} opacity={0.2} textOpacity={0.4}
           text={"PROFILE DETAILS"} />

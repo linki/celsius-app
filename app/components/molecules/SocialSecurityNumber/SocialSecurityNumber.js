@@ -112,6 +112,19 @@ class SocialSecurityNumber extends Component {
             <View style={{ height: 40, alignItems: 'center', alignContent: 'center', justifyContent: 'center' }}>
               <CelText color='red' >{formErrors.ssn}</CelText>
             </View>
+            <View style={{ flexWrap: 'wrap', alignContent: 'center', justifyContent: 'center', paddingBottom: 20 }}>
+            {!user.ssn &&
+              <CelButton
+                onPress={() => onPress()}
+                iconRight={"IconArrowRight"}
+                iconRightHeight={"20"}
+                iconRightWidth={"20"}
+                loading={updatingTaxInfo}
+              >
+                Submit SSN
+              </CelButton>
+            }
+            </View>
           </View>
           :
           <React.Fragment>
@@ -122,9 +135,9 @@ class SocialSecurityNumber extends Component {
                 field="itin"
                 placeholder="E-International Tax ID Number (optional)"
                 value={user.itin ? user.itin : formData.itin}
-                error={formErrors.itin} 
+                error={formErrors.itin}
                 disabled={!!user.itin}
-                />
+              />
             </View>
             <View style={style.nationalID}>
               <CelInput
@@ -133,31 +146,28 @@ class SocialSecurityNumber extends Component {
                 field="national_id"
                 placeholder="E-National ID Number (optional)"
                 value={user.national_id ? user.national_id : formData.national_id}
-                error={formErrors.national_id} 
+                error={formErrors.national_id}
                 disabled={!!user.national_id}
                 multiline
                 numberOfLines={2}
-                />
+              />
+            </View>
+            <View style={{ flexWrap: 'wrap', alignContent: 'center', justifyContent: 'center', paddingBottom: 20 }}>
+              {(!user.itin && !updatingTaxInfo) &&
+                <CelButton
+                  onPress={() => onPress()}
+                  iconRight={"IconArrowRight"}
+                  iconRightHeight={"20"}
+                  iconRightWidth={"20"}
+                  loading={updatingTaxInfo}
+                >
+                  Continue
+                </CelButton>
+              }
             </View>
           </React.Fragment>
         }
-        <View style={{ flexWrap: 'wrap', alignContent: 'center', justifyContent: 'center', paddingBottom: 20 }}>
-
-          {(!user.ssn || !user.national_id) &&
-            <CelButton
-              onPress={() => onPress()}
-              iconRight={"IconArrowRight"}
-              iconRightHeight={"20"}
-              iconRightWidth={"20"}
-              loading={updatingTaxInfo}
-            >
-              {(isUSCitizen()) ?
-                'Submit SSN' : 'Continue'}
-            </CelButton>
-          }
-        </View>
       </View>
-
     );
   }
 }
