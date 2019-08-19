@@ -9,6 +9,7 @@ import CelText from "../CelText/CelText";
 const ExpandableItem = (props) => {
 
   const style = ExpandableItemStyle(props.theme)
+  const { children } = props
   return (
       <View
         style={ [props.style, style.container] }
@@ -21,15 +22,13 @@ const ExpandableItem = (props) => {
         <CelText
           type={'H5'}
           style={{ marginTop: 20}}
-        >
-          {props.content }
-        </CelText>
+        >{ children }</CelText>
       </View>
   )
 }
 ExpandableItem.propTypes = {
   heading: PropTypes.string,
-  content: PropTypes.string.isRequired,
+  // content: PropTypes.string.isRequired,
   style: PropTypes.instanceOf(Object)
 }
 

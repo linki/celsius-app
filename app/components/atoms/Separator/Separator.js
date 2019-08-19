@@ -141,7 +141,6 @@ class Separator extends Component {
     const separatorColor = color || this.getSeparatorColor(style)
     const margins = getMargins(margin)
 
-
     return (
       <View style={[style.content, margins]}>
         <View
@@ -196,17 +195,15 @@ class Separator extends Component {
       return <VerticalSeparator />
     }
 
-    if (text && !expandable) {
+    if (!text && !expandable) {
       return <HorizontalSeparator />
     }
 
-    if (text && expandable) {
-      return  <ExpandableSeparator />
+    if (text && !expandable) {
+      return  <TextSeparator />
     }
 
-    if (text) {
-      return <TextSeparator />
-    }
+    return <ExpandableSeparator />
   }
 }
 

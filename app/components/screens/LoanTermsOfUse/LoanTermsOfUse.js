@@ -1,53 +1,76 @@
-import React, {Component, Fragment} from 'react';
-import { Linking } from 'react-native';
+import React, {Component } from 'react';
+import { Linking, View, TouchableOpacity } from 'react-native';
 // import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
-// import { bindActionCreators } from "redux";
-//
-//
-// import * as appActions from "../../../redux/actions";
-// import LoanTermsOfUseStyle from "./LoanTermsOfUse.styles";
+import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+
+import * as appActions from "../../../redux/actions";
+import LoanTermsOfUseStyle from "./LoanTermsOfUse.styles";
 import CelText from '../../atoms/CelText/CelText';
 import RegularLayout from '../../layouts/RegularLayout/RegularLayout';
 import CelButton from "../../atoms/CelButton/CelButton";
 import {MODALS} from "../../../constants/UI";
+import CelCheckbox from "../../atoms/CelCheckbox/CelCheckbox";
+import STYLES from "../../../constants/STYLES";
+import Card from "../../atoms/Card/Card";
+import ExpandableItem from "../../atoms/ExpandableItem/ExpandableItem";
 import Separator from "../../atoms/Separator/Separator";
+import Icon from "../../atoms/Icon/Icon";
 
-// @connect(
-//   state => ({
-//   }),
-//   dispatch => ({ actions: bindActionCreators(appActions, dispatch) }),
-// )
+@connect(
+  state => ({
+    formData: state.forms.formData
+  }),
+  dispatch => ({ actions: bindActionCreators(appActions, dispatch) }),
+)
 
 class LoanTermsOfUse extends Component {
-  static propTypes = {};
-  static defaultProps = {}
 
   static navigationOptions = () => ({
     title: "Terms and Conditions",
   });
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      acceptPt1: false,
+      acceptPt2: false,
+      acceptPt3: false
+    }
+
+    props.actions.initForm({
+      acceptLoanTermsOfUse: false
+    })
+  }
 
   handleCopy = () => (
     {
       termsPt1: [
         {
           title: null,
-          content: `Celsius Network Limited ("we", "our", "us", "Celsius", "Lender", or the "Company") provides the following Loan Terms and Conditions (the "Loan Conditions") that apply to our borrowers (each, "you" or "Borrower") when you seek to initiate a transaction pursuant to which we, the Lender, will lend Fiat money or Stablecoins (as defined below) to you, and you will return Fiat money or Stablecoins to us in accordance with the terms hereof (each such transaction, a "Loan").\n
-Each Loan is provided solely for use by you, and your application for a Loan is expressly conditioned on your consent to, and compliance with, these Loan Conditions. Please carefully review these Loan Conditions and use them to make informed decisions. By applying for a Loan, you agree to be bound by these Loan Conditions. If you do not agree to any of the provisions of these Loan Conditions you should not apply for a Loan. In addition, our ${ this.renderHyperLink('\'https://celsius.network/terms-of-use/\')', 'Network Terms and Conditions')} (the "Network Terms"), and our ${this.renderHyperLink('https://celsius.network/privacy-policy/', 'Privacy Policy')} are incorporated into these Loan Conditions by reference.`
+          textArray: [
+            { text: 'Celsius Network Limited ("we", "our", "us", "Celsius", "Lender", or the "Company") provides the following Loan Terms and Conditions (the "Loan Conditions") that apply to our borrowers (each, "you" or "Borrower") when you seek to initiate a transaction pursuant to which we, the Lender, will lend Fiat money or Stablecoins (as defined below) to you, and you will return Fiat money or Stablecoins to us in accordance with the terms hereof (each such transaction, a "Loan").\n ' +
+                'Each Loan is provided solely for use by you, and your application for a Loan is expressly conditioned on your consent to, and compliance with, these Loan Conditions. Please carefully review these Loan Conditions and use them to make informed decisions. By applying for a Loan, you agree to be bound by these Loan Conditions. If you do not agree to any of the provisions of these Loan Conditions you should not apply for a Loan. In addition, our '},
+            { type: 'link', text: 'https://celsius.network/terms-of-use/' },
+            { text: ' (the "Network Terms"), and our ' },
+            { type: 'link', text: 'https://celsius.network/privacy-policy/' },
+            { text: ' are incorporated into these Loan Conditions by reference.' },
+          ]
         },
         {
           title: `1. Definitions`,
-          copy: `\t(i) "Account" means your account with Celsius set up and maintained pursuant to the Network Terms.\n
+          copy: `\t\t(i) "Account" means your account with Celsius set up and maintained pursuant to the Network Terms.\n
           \t(ii) "Affiliate" means an entity that owns or controls, is owned or controlled by, or is or under common control or ownership with a party, where control is defined as the direct or indirect power to direct or cause the direction of the management and policies of such party, whether through ownership of voting securities, by contract, or otherwise.\n
           \t(iii) "Collateral" means an amount in Eligible Digital Assets, as provided by the Borrower to the Lender as security for a Loan.\n
-          \t(iv) "CEL" means Celsius’ proprietary Digital Asset that is generated on the Celsius Network.
+          \t(iv) "CEL" means Celsius’ proprietary Digital Asset that is generated on the Celsius Network.\n
           \t(v) "Digital Asset" means digital representation of value in which encryption techniques are used to regulate the generation of units of currency and verify the transfer of funds, operating independently from a central bank.\n
           \t(vi) "Eligible Digital Asset" means the types of Digital Assets we may choose to accept and support from time to time, which are subject to change in our sole discretion, based on business and regulatory considerations.\n
           \t(vii) "Eligible Stablecoins" means the types of Stablecoins we may choose to accept and support from time to time, which are subject to change in our sole discretion, based on business and regulatory considerations.\n
          \t(viii) "Fiat", when used in reference to money or currency, means any money that a recognized government declares as legal tender.\n
           \t(ix) "Loan Effective Date" means the date upon which a Loan is granted.\n
           \t(x) "Maturity Date" means the date stated in the Term Sheet as the date of last repayment of the Loan by Borrower. \n
-          \t(xi) "Obligations" means any debts, amounts owed, or liabilities incurred by you to Celsius.
+          \t(xi) "Obligations" means any debts, amounts owed, or liabilities incurred by you to Celsius.\n
           \t(xii) "Principal" means the amount of a Loan granted under these Loan Conditions, as stated in the Term Sheet.\n
           \t(xiii) "Stablecoin" means a Digital Asset that is pegged to (its exchange rate is fixed to that of) a Fiat currency.`
         },
@@ -63,7 +86,7 @@ Each Loan is provided solely for use by you, and your application for a Loan is 
         },
         {
           title: `3. Repayment`,
-          copy: `\t(a) You shall repay the amount of the Principal together with any interest and late fees due thereon in accordance with the terms hereof (the "Loan Amount"), in accordance with the repayment schedule agreed in the Term Sheet.\n
+          copy: `\t\t(a) You shall repay the amount of the Principal together with any interest and late fees due thereon in accordance with the terms hereof (the "Loan Amount"), in accordance with the repayment schedule agreed in the Term Sheet.\n
           \t(b) Repayment of the Loan shall be made using the same payment method as the Principal was disbursed to you – e.g. if disbursed in Stablecoins, it must be repaid in the same type of Stablecoin, and if made by bank transfer it must be repaid by bank transfer using the same Fiat currency, all unless otherwise agreed upon by Celsius in writing.\n
           \t(c) Repayment of the Loan shall be made using the same payment method as the Principal was disbursed to you – e.g. if disbursed in Stablecoins, it must be repaid in the same type of Stablecoin, and if made by bank transfer it must be repaid by bank transfer using the same Fiat currency, all unless otherwise agreed upon by Celsius in writing.\n
           \t(d) Late Repayment\n
@@ -73,12 +96,12 @@ Each Loan is provided solely for use by you, and your application for a Loan is 
         },
         {
           title: `4. Term`,
-          copy: `\t(a) Celsius Loans are granted for a fixed period of time to be agreed upon between Celsius and you, and indicated in the Term sheet (the "Loan Term").\n
+          copy: `\t\t(a) Celsius Loans are granted for a fixed period of time to be agreed upon between Celsius and you, and indicated in the Term sheet (the "Loan Term").\n
           \t(a) Celsius may offer Loan Terms of various durations for you to choose from, and may change or limit duration offerings in its sole discretion.\n`
         },
         {
           title: `5. Early Repayment`,
-          copy: `\t(a) Subject to the terms of this Section 5, both you and/or Celsius may, at any time, for any or no reason, request the early repayment of all or part of the Loan Amount (the "Early Repayment").\n
+          copy: `\t\t(a) Subject to the terms of this Section 5, both you and/or Celsius may, at any time, for any or no reason, request the early repayment of all or part of the Loan Amount (the "Early Repayment").\n
           \t(b) Subject to the terms of this Section 5, both you and/or Celsius may, at any time, for any or no reason, request the early repayment of all or part of the Loan Amount (the "Early Repayment").\n
           \t(c) In any event of Early Repayment or otherwise termination by you prior to the lapse of 6 months of the Loan Effective Date, you will be nevertheless obligated to pay Celsius the interest for the full first 6-month period. If the Loan is repaid in full or terminated, such 6-months' interest shall immediately be due and payable, and if you make a partial Early Repayment, the outstanding amounts left outstanding shall be recalculated in such a way that the interest to be paid by you until Maturity Date shall amount to no less than six (6)-months' interest. \n
           \t (d) Celsius may request an Early Repayment by giving written notice to you, stating the amount it wishes you to repay. Upon such Celsius' request, you shall have thirty (30) days to make the Early Repayment as requested, or otherwise Celsius will be entitled to liquidate the corresponding portion of your Collateral to cover for the Fiat amount requested.\n
@@ -86,7 +109,7 @@ Each Loan is provided solely for use by you, and your application for a Loan is 
         },
         {
           title: `6. Termination `,
-          copy: `\t(a) Both you and/or Celsius may, for any or no reason, terminate the Loan with thirty (30) days prior notice in writing to the other party.\n
+          copy: `\t\t(a) Both you and/or Celsius may, for any or no reason, terminate the Loan with thirty (30) days prior notice in writing to the other party.\n
           \t(b) Celsius may, upon the occurrence of a Default Event under Section ‎11 below, terminate the Loan with immediate effect.\n
           \t(c) Once the Loan is terminated, all outstanding Loan Amount shall become immediately due and payable. Should you fail to repay the full outstanding Loan Amount within seven (7) days, Celsius shall be entitled to liquidate the corresponding amount from your Collateral, in accordance with the terms of Section ‎12 below.\n
           \t(d) Within ten (10) days of your full repayment of the outstanding Loan Amount, Celsius shall release all remaining Collateral to your Celsius Account.\n
@@ -137,8 +160,8 @@ Each Loan is provided solely for use by you, and your application for a Loan is 
           \t\t(viii) It is or becomes illegal for you to perform your obligations under the Loan, or your Account;\n
           \t\t(ix) It is or becomes illegal under any applicable regulatory framework for Celsius to perform its obligations or exercise its rights under the Loan or your Account;\n
           \t\t(x) Celsius is unable to contact you (or you fail to meaningfully respond to any communications from Celsius) in accordance with your most recent instructions for providing notices; or\n
-          \t\t(xi) A significant deterioration (determined in Celsius’ sole reasonable discretion) in your business or financial position occurs during the Loan Term.
-          \t\t(xii) These Loan Conditions ceases to be in full force and effect at any time and for any reason.
+          \t\t(xi) A significant deterioration (determined in Celsius’ sole reasonable discretion) in your business or financial position occurs during the Loan Term.\n
+          \t\t(xii) These Loan Conditions ceases to be in full force and effect at any time and for any reason.\n
           \t(b) Immediately upon Celsius becoming aware of a Default Event, Celsius may, in its sole discretion, take any of the actions specified below:\n
           \t\t(i) Terminate the Loan;\n
           \t\t(ii) Declare payable any principal amount due in respect of the Loan, as well as the interest accrued and any other amount due in respect of the Loan;\n
@@ -152,7 +175,11 @@ Each Loan is provided solely for use by you, and your application for a Loan is 
         },
         {
           title: `13. Interest Rates`,
-          copy: `The annual interest rate applicable to the Loan is as prescribed in the Term Sheet. Interest rates offered by Celsius are determined by Celsius, in its sole discretion, based on the Principal amount, the LTV, market demand and risk management (among other considerations). Interest rate information is available at ${this.renderHyperLink('https://celsius.network/borrow-dollars-using-crypto-as-collateral/', 'link')}. Interest shall be calculated by Celsius at the end of each calendar day on the basis of the actual number of days elapsed in a 365-day year. In any event the interest rate is limited by applicable laws and regulations in such a way that the agreed upon rate would not be compliant therewith, the effective interest rate shall be amended to the legal rate closest to the agreed upon rate.`
+          textArray: [
+            { text: `The annual interest rate applicable to the Loan is as prescribed in the Term Sheet. Interest rates offered by Celsius are determined by Celsius, in its sole discretion, based on the Principal amount, the LTV, market demand and risk management (among other considerations). Interest rate information is available at `},
+            { type: 'link', text: 'https://celsius.network/borrow-dollars-using-crypto-as-collateral/'},
+            { text: '. Interest shall be calculated by Celsius at the end of each calendar day on the basis of the actual number of days elapsed in a 365-day year. In any event the interest rate is limited by applicable laws and regulations in such a way that the agreed upon rate would not be compliant therewith, the effective interest rate shall be amended to the legal rate closest to the agreed upon rate.'}
+          ]
         },
         {
           title: `14. Borrower's Representations`,
@@ -176,72 +203,132 @@ Each Loan is provided solely for use by you, and your application for a Loan is 
         \t(iii) You will not be entitled to receive any benefits granted to the holder of any Digital Asset from time to time, including any airdrops, New Currency resulting from a Hard Fork (as these terms are defined in the Network Terms).\n`
       },
       {
-        title: `Pledge Agreement`,
+        title: `16. Pledge Agreement`,
         copy: `Borrower hereby pledges in favor of Celsius and its Affiliates any and all assets regardless of their form or kind that currently are (or which may be in the future) held in Borrower’s Celsius Account(s) as collateral for any present or future claims, including any interest, commissions, fees or other charges, that Celsius may have against the Borrower, including as a result of third-party claims related to the Borrower’s Account (the "Right of Pledge"). The Right of Pledge granted to Celsius hereunder shall extend to any and all present or future interest, dividends, proceeds, subscription rights or any other matured rights deriving from, or appurtenant to, the pledged assets. The Right of Pledge shall extend in particular to:\n
         \t(i) Any and all assets currently or subsequently held in Borrower's Account;
         \t(ii) Any and all assets, claims, cash or other objects and rights that have been (or which may be in the future) deposited in or credited to Borrower's Account. In the event the pledged assets are replaced by other assets, the latter shall also be subject to the Right of Pledge without further action\n
         Borrower authorizes Celsius to carry out all formalities that may be necessary for Celsius to exercise its rights as pledgee, including its registration in public records, and undertakes to assist Celsius in doing so, upon Celsius’ reasonable request. The Right of Pledge shall remain valid independently of any other present or future security interests or guarantees held by Celsius, and shall only expire upon Celsius’ reimbursement in full by Borrower. Celsius shall be entitled to realize all or part of the pledged assets without having to serve formal notice.`
       },
       {
-        title: `Conversion Rates`,
-        copy: `Any conversion between a Digital Asset and another Digital Asset or Fiat currency shall be made by us in accordance with the rates and prices applicable at the actual time of conversion. Applicable rates are indexed to those used by industry leading platforms, as we may choose to use from time to time, in our sole discretion. We currently use rates provided by ${this.renderHyperLink('http://www.bitgo.com/', 'BitGo')}, ${this.renderHyperLink('https://coinmarketcap.com/', 'CMC Markets')}, and our own rates as determined by our liquidity providers. We may change these rate sources at any time and without giving prior notice or updating these Loan Conditions, and you shall not have any claims regarding our choice of rate sources or rates made available by any third party. `
+        title: `17. Conversion Rates`,
+        copy: `Any conversion between a Digital Asset and another Digital Asset or Fiat currency shall be made by us in accordance with the rates and prices applicable at the actual time of conversion. Applicable rates are indexed to those used by industry leading platforms, as we may choose to use from time to time, in our sole discretion. We currently use rates provided by 'http://www.bitgo.com/', 'https://coinmarketcap.com/', and our own rates as determined by our liquidity providers. We may change these rate sources at any time and without giving prior notice or updating these Loan Conditions, and you shall not have any claims regarding our choice of rate sources or rates made available by any third party. `,
+        textArray: [
+          { text: `Any conversion between a Digital Asset and another Digital Asset or Fiat currency shall be made by us in accordance with the rates and prices applicable at the actual time of conversion. Applicable rates are indexed to those used by industry leading platforms, as we may choose to use from time to time, in our sole discretion. We currently use rates provided by ` },
+          { type: 'link', text: 'http://www.bitgo.com/ ' },
+          { text: ', ' },
+          { type: '', text: 'https://coinmarketcap.com/' },
+          { text: ', and our own rates as determined by our liquidity providers. We may change these rate sources at any time and without giving prior notice or updating these Loan Conditions, and you shall not have any claims regarding our choice of rate sources or rates made available by any third party.'}
+        ]
       },
       {
         title: `18. Taxes`,
         copy: `It is your sole responsibility to determine what, if any, taxes apply to the payments you make or receive, and to collect, report, and remit the correct tax to the appropriate tax authority. We may deduct or make any tax withholdings or filings that we are required by law to make, but we are not responsible for determining whether taxes apply to your Loan, or for collecting, reporting, or remitting any taxes arising from any Loan, its payment or repayment. You are responsible for complying with applicable laws. You agree that Celsius is not responsible for determining whether or which laws may apply to your transactions, including tax law.`
       },
       {
-        title: `Indemnification and Limitation of Liability; Attorney’s Fees and Costs for Lawsuits`,
+        title: `19. Indemnification and Limitation of Liability; Attorney’s Fees and Costs for Lawsuits`,
         copy: `You agree to indemnify and hold harmless Celsius and its employees, managers, partners and Affiliates from any losses, damages, suits and expenses, of any kind, including reasonable attorneys’ fees, that we incur in connection with or arising out of your use of the Principal, or our activities in connection with the Loan, and for your violation of any law, regulation, order or other legal mandate, or the rights of a third party, or any act or omission by you or any person acting on your behalf in connection with the Loan, regardless of whether the specific use was expressly authorized by you. You agree to comply with applicable law and not to use the Principal for any transaction or activity that is illegal or violates applicable laws, regulations or rules. Please note, your agreement to comply includes any and all applicable laws and regulations of the United States, as well as of your place of residency and any law applicable to you.\n
         We are not liable to you for claims, costs, losses or damages caused by an event that is beyond our reasonable control (e.g. the acts or omissions of third parties, natural disasters, emergency conditions, government actions, equipment or communications malfunction). We are not liable for special, incidental, exemplary, punitive or consequential losses or damages of any kind. Except for any setoff permitted by applicable law, any Obligations of ours may be satisfied solely from the assets of Celsius. Without limiting the generality of the foregoing, in no event shall you have any recourse, whether by setoff or otherwise, with respect to our Obligations, to or against any assets of any person or entity other than Celsius for Celsius' Obligations, including, without limitation, any member, Affiliate, investor, employee, officer, agent or advisor of Celsius. \n
         Celsius reserves the right to withhold or delay the withdrawal of funds or assets belonging to you if you fail to comply with the Loan Conditions. Our total, aggregate liability to you for any claim is limited to the face value of the applicable item or transaction, or the actual value of any funds not properly credited or debited.\n`
       },
       {
         title: `20. General`,
-        copy: `\t(a) If, at any time, a provision of these Loan Conditions are declared unlawful, invalid or unenforceable in any manner with respect to the laws of any applicable jurisdiction, the lawfulness, validity and enforceability of the remaining provisions of these Loan Conditions shall not be affected thereby. The parties shall replace the unlawful, invalid or unenforceable provision with a provision that is as consistent with the original intent and content as possible.\n
+        copy: `\t\t(a) If, at any time, a provision of these Loan Conditions are declared unlawful, invalid or unenforceable in any manner with respect to the laws of any applicable jurisdiction, the lawfulness, validity and enforceability of the remaining provisions of these Loan Conditions shall not be affected thereby. The parties shall replace the unlawful, invalid or unenforceable provision with a provision that is as consistent with the original intent and content as possible.\n
         \t(b) If, at any time, Celsius is required by any applicable law, regulation or order from a competent court or governmental authority to make a deduction or withholding on an Obligation or Collateral, you agree to pay whatever additional amount is necessary such that, once the deduction or withholding is taken into account, Celsius will actually receive the total amount that we would have received if that deduction or withholding had not been made.\n
         \t(c) Celsius has the right to offset any Obligation against any funds or obligations owed to you under any contract, and regardless of the currency of such Obligation, all amounts owed by you to Celsius must be paid to Celsius without invoking any offset or counterclaim, unless otherwise specifically authorized by these Loan Conditions.\n
         \t(d) If Celsius must incur any additional cost to maintain or finance your Account and/or Loan pursuant to a legal or regulatory requirement, you agree to pay Celsius the amount that we certify is necessary to offset this increased cost.\n
         \t(e) The relationship between you and Celsius is governed exclusively by the laws of the State of Delaware, without regard to its conflict of law provisions. Any dispute arising out or, or related to, your Account, Loan, or relationship with Celsius must be brought exclusively in the courts located in Dover, Delaware; however, Celsius may bring equitable relief or collections actions in any applicable jurisdiction.`
       }
     ]
-    })
+    }
+    )
 
-  requestButtonHandle = () => {
+  handleRequestButton = () => {
     const { actions } = this.props
 
-    // actions.applyForALoan(formData)
     actions.openModal(MODALS.LOAN_APPLICATION_SUCCESS_MODAL)
   }
 
 
-  renderHyperLink = (url, copy) => (
-      <CelText onPress={() => Linking.openURL(url)}>{copy}</CelText>
-    )
 
-  renderToU = () => {
+  handleAcceptance = () => {
+    const { acceptPt1, acceptPt2, acceptPt3 } = this.state
+    const { formData } = this.props
+
+    if (acceptPt1 && acceptPt2 && acceptPt3) {
+      formData.acceptLoanTermsOfUse = true
+    } else {
+      formData.acceptLoanTermsOfUse = false
+    }
+  }
+
+
+  renderToU1 = () => {
     const termsOfUse = this.handleCopy()
-
-    // return termsOfUse
+    const style = LoanTermsOfUseStyle();
 
     return (
-      termsOfUse.termsPt1.map(
-        (o, i) => (
-          <Fragment key={i}>
-            <Separator text={ o.title } />
-            <CelText type={'H5'}>{ o.copy }</CelText>
-          </Fragment>
-        )
+      termsOfUse.termsPt1.map( (o, i) =>
+        <ExpandableItem style={style.expandableItem} key={ i } heading={ o.title }>
+          <CelText>{o.textArray ? this.renderTextArray(o.textArray) :  o.copy}</CelText>
+        </ExpandableItem> )
+    )
+  }
+
+  renderToU2 = () => {
+    const termsOfUse = this.handleCopy()
+    const style = LoanTermsOfUseStyle();
+
+    return (
+      termsOfUse.termsPt2.map( (o, i) =>
+        <ExpandableItem style={style.expandableItem} key={ i } heading={ o.title }>
+          <CelText>{o.textArray ? this.renderTextArray(o.textArray) :  o.copy}</CelText>
+        </ExpandableItem> )
+    )
+  }
+
+  renderPart = (part) => {
+    if (part.type === 'link') {
+      return(
+        <CelText
+          onPress={ () => Linking.openURL(part.text)}
+          color={ STYLES.COLORS.CELSIUS_BLUE }
+        >{ part.text }
+        </CelText>
       )
+    }
+      return <CelText>{ part.text }</CelText>
+
+  }
+
+  renderTextArray = (textArray) => (
+      <CelText>{ textArray.map(this.renderPart) }</CelText>
+    )
+
+
+  renderToU3 = () => {
+    const termsOfUse = this.handleCopy()
+    const style = LoanTermsOfUseStyle();
+
+    return (
+      termsOfUse.termsPt3.map( (o, i) =>
+        <ExpandableItem style={style.expandableItem} key={ i } heading={ o.title }>
+          <CelText>{o.textArray ? this.renderTextArray(o.textArray) :  o.copy}</CelText>
+        </ExpandableItem> )
     )
   }
 
 
   render() {
-    // const style = LoanTermsOfUseStyle();
+    const { formData } = this.props
+    const { acceptPt1, acceptPt2, acceptPt3 } = this.state
+    const style = LoanTermsOfUseStyle()
+
+    this.handleAcceptance()
 
     return (
-      <RegularLayout>
+      <RegularLayout
+        fabType={'hide'}
+      >
         <CelText
           type={'H2'}
           weight={'bold'}
@@ -249,10 +336,81 @@ Each Loan is provided solely for use by you, and your application for a Loan is 
           Celsius Loan Terms and Conditions
         </CelText>
 
-        { this.renderToU() }
+        { this.renderToU1() }
+
+        <Card
+          color={ STYLES.COLORS.WHITE }
+          margin={'0 0 20 0'}
+        >
+          <CelCheckbox
+            onChange={ (field, value) =>  this.setState({ acceptPt1: value })}
+            field={ 'acceptPt1' }
+            value={ acceptPt1 }
+            uncheckedCheckBoxColor={ STYLES.COLORS.GRAY }
+            checkedCheckBoxColor={ STYLES.COLORS.GREEN }
+            rightText={'I have read, understood and agree to the above mentioned in sections 1-7'}
+          />
+        </Card>
+
+        { this.renderToU2() }
+        <Card
+          color={ STYLES.COLORS.WHITE}
+        >
+          <CelCheckbox
+            onChange={ (field, value) =>  this.setState({ acceptPt2: value })}
+            field={ 'acceptPt2' }
+            value={ acceptPt2 }
+            uncheckedCheckBoxColor={ STYLES.COLORS.GRAY }
+            checkedCheckBoxColor={ STYLES.COLORS.GREEN }
+            rightText={'I have read, understood and agree to the above mentioned in sections 8-14'}
+          />
+        </Card>
+
+        { this.renderToU3() }
+        <Card
+          color={ STYLES.COLORS.WHITE }
+        >
+          <CelCheckbox
+            onChange={ (field, value) =>  this.setState({ acceptPt3: value })}
+            field={ 'acceptPt3' }
+            value={ acceptPt3 }
+            uncheckedCheckBoxColor={ STYLES.COLORS.GRAY }
+            checkedCheckBoxColor={ STYLES.COLORS.GREEN }
+            rightText={'I have read, understood and agree to the above mentioned in sections 8-20'}
+          />
+        </Card>
+        <Card
+          color={ STYLES.COLORS.WHITE }
+        >
+          <View style={ style.shareCard }>
+            <TouchableOpacity style={ style.downloadButton }>
+              <Icon name='KycCamera' height='24' fill={STYLES.COLORS.GRAY} />
+              <CelText
+                align={'center'}
+              >Download T&C</CelText>
+            </TouchableOpacity>
+            <Separator
+              color={'red'}
+              vertical
+              height={"40%"}
+              top={10}
+            />
+            <TouchableOpacity style={ style.shareButton }>
+              <Icon name='KycCamera' height='24' fill={STYLES.COLORS.GRAY} />
+              <CelText
+                align={'center'}
+              >Share</CelText>
+            </TouchableOpacity>
+          </View>
+        </Card>
+
         <CelButton
-          onPress={ this.requestButtonHandle }
-        >Request Loan</CelButton>
+          onPress={ this.handleRequestButton }
+          style={ style.requestButton }
+          disabled={ !formData.acceptLoanTermsOfUse  }
+        >
+          Request Loan
+        </CelButton>
       </RegularLayout>
     );
   }
