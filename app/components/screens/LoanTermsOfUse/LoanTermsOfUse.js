@@ -160,7 +160,12 @@ class LoanTermsOfUse extends Component {
         >
           <View style={ style.shareCard }>
             <TouchableOpacity style={ style.downloadButton }>
-              <Icon name='KycCamera' height='24' fill={STYLES.COLORS.GRAY} />
+              <Icon
+                name='Download'
+                height='24'
+                fill={STYLES.COLORS.GRAY}
+                style={ style.iconStyle }
+              />
               <CelText
                 align={'center'}
               >Download T&C</CelText>
@@ -172,7 +177,11 @@ class LoanTermsOfUse extends Component {
               top={10}
             />
             <TouchableOpacity style={ style.shareButton }>
-              <Icon name='KycCamera' height='24' fill={STYLES.COLORS.GRAY} />
+              <Icon name='Share'
+                height='24'
+                fill={ STYLES.COLORS.GRAY }
+                style={ style.iconStyle }
+              />
               <CelText
                 align={'center'}
               >Share</CelText>

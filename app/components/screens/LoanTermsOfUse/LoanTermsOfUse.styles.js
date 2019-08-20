@@ -23,6 +23,9 @@ const base = {
   },
   shareButton: {
     flex: 0.5
+  },
+  iconStyle: {
+    marginBottom: 10
   }
 }
 
