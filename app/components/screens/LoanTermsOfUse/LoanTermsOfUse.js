@@ -62,22 +62,23 @@ class LoanTermsOfUse extends Component {
     }
   }
 
-  renderPart = (part) => {
+  renderPart = (part, i) => {
     if (part.type === 'link') {
       return(
         <CelText
+          key={i}
           onPress={ () => Linking.openURL(part.text)}
           color={ STYLES.COLORS.CELSIUS_BLUE }
         >{ part.text }
         </CelText>
       )
     }
-      return <CelText>{ part.text }</CelText>
+      return <CelText key={i}>{ part.text }</CelText>
 
   }
 
   renderTextArray = (textArray) => (
-      <CelText>{ textArray.map(this.renderPart) }</CelText>
+      <CelText>{ textArray.map((obj, i) => this.renderPart(obj, i)) }</CelText>
     )
 
   renderTermsOfUse = (part) => {
