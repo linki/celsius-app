@@ -119,11 +119,10 @@ class KYCTaxpayer extends Component {
 
         <CelText align={"center"} margin={"10 0 0 0"} type={"H4"} weight={"300"}>{this.isFromUS() ? 'US residents must provide their SSN to earn interest through Celsius. This is an optional step and can be entered later.' : 'You may need to fill your taxpayer ID for tax reporting. You may add it later in your profile.'}</CelText>
 
-
         <SocialSecurityNumber
           onPress={() => this.submitTaxpayerInfo()}
+          updatingTaxInfo={updatingTaxInfo}
         />
-
 
         {this.isFromUS() ? <CelButton
           onPress={() => actions.openModal(MODALS.SSN_MODAL)}

@@ -24,7 +24,7 @@ let focused = 0;
 class SocialSecurityNumber extends Component {
 
   static propTypes = {
-    submitTaxpayerInfo: PropTypes.string,
+    updatingTaxInfo: PropTypes.bool
   };
   static defaultProps = {
   }
@@ -41,8 +41,7 @@ class SocialSecurityNumber extends Component {
   };
 
   render() {
-    const { formData, formErrors, user, onPress } = this.props;
-    const { updatingTaxInfo } = this.state;
+    const { formData, formErrors, user, onPress, updatingTaxInfo } = this.props;
     const style = SocialSecurityNumberStyle();
     const ssnArray = user.ssn ? user.ssn.split("-") : {};
 
@@ -153,7 +152,7 @@ class SocialSecurityNumber extends Component {
               />
             </View>
             <View style={{ flexWrap: 'wrap', alignContent: 'center', justifyContent: 'center', paddingBottom: 20 }}>
-              {(!user.itin && !updatingTaxInfo) &&
+              {(!user.itin && !user.national_id) &&
                 <CelButton
                   onPress={() => onPress()}
                   iconRight={"IconArrowRight"}
@@ -161,7 +160,7 @@ class SocialSecurityNumber extends Component {
                   iconRightWidth={"20"}
                   loading={updatingTaxInfo}
                 >
-                  Continue
+                  Submit
                 </CelButton>
               }
             </View>

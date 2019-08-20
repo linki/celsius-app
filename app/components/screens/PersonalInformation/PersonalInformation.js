@@ -35,8 +35,13 @@ class PersonalInformation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      updatingTaxInfo: false
+      updatingTaxInfo: false,
+      isTaxInfoUpdated: false,
     };
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return (nextProps.user.itin !== this.props.user.itin && nextProps.user.national_id !== this.props.user.national_id) || (nextProps.user.ssn !== this.props.user.ssn)
   }
 
   submitTaxpayerInfo = async () => {
@@ -54,8 +59,6 @@ class PersonalInformation extends Component {
       updateTaxInfo = {
         ssn: formData.ssn1 + formData.ssn2 + formData.ssn3
       };
-
-
     } else {
       updateTaxInfo = {
         national_id: formData.national_id,
@@ -66,15 +69,15 @@ class PersonalInformation extends Component {
     const response = await actions.updateTaxpayerInfo(updateTaxInfo);
 
     if (response.success) {
+      actions.getProfileInfo()
       actions.showMessage("success", "You have successfully submitted ssn number");
-
     }
-
     this.setState({ updatingTaxInfo: false });
   };
 
   render() {
     const { user, actions, formErrors } = this.props;
+    const { updatingTaxInfo } = this.state;
     const style = PersonalInformationStyle();
     const dateOfBirth = user.date_of_birth ? user.date_of_birth.split("-") : {};
     const userSetCountry = user.country !== null
@@ -103,6 +106,7 @@ class PersonalInformation extends Component {
                 }
                 <SocialSecurityNumber
                   onPress={() => this.submitTaxpayerInfo()}
+                  updatingTaxInfo={updatingTaxInfo}
                 />
               </View>
             }
@@ -116,6 +120,7 @@ class PersonalInformation extends Component {
 
                 <SocialSecurityNumber
                   onPress={() => this.submitTaxpayerInfo()}
+                  updatingTaxInfo={updatingTaxInfo}
                 />
               </View>
             }
