@@ -62,31 +62,6 @@ class LoanTermsOfUse extends Component {
     }
   }
 
-
-  renderToU1 = () => {
-    const termsOfUse = handleCopy()
-    const style = LoanTermsOfUseStyle();
-
-    return (
-      termsOfUse.termsPt1.map( (o, i) =>
-        <ExpandableItem style={style.expandableItem} key={ i } heading={ o.title }>
-          <CelText>{o.textArray ? this.renderTextArray(o.textArray) :  o.copy}</CelText>
-        </ExpandableItem> )
-    )
-  }
-
-  renderToU2 = () => {
-    const termsOfUse = handleCopy()
-    const style = LoanTermsOfUseStyle();
-
-    return (
-      termsOfUse.termsPt2.map( (o, i) =>
-        <ExpandableItem style={style.expandableItem} key={ i } heading={ o.title }>
-          <CelText>{o.textArray ? this.renderTextArray(o.textArray) :  o.copy}</CelText>
-        </ExpandableItem> )
-    )
-  }
-
   renderPart = (part) => {
     if (part.type === 'link') {
       return(
@@ -105,13 +80,11 @@ class LoanTermsOfUse extends Component {
       <CelText>{ textArray.map(this.renderPart) }</CelText>
     )
 
-
-  renderToU3 = () => {
-    const termsOfUse = handleCopy()
+  renderTermsOfUse = (part) => {
     const style = LoanTermsOfUseStyle();
 
     return (
-      termsOfUse.termsPt3.map( (o, i) =>
+      part.map( (o, i) =>
         <ExpandableItem style={style.expandableItem} key={ i } heading={ o.title }>
           <CelText>{o.textArray ? this.renderTextArray(o.textArray) :  o.copy}</CelText>
         </ExpandableItem> )
@@ -123,7 +96,7 @@ class LoanTermsOfUse extends Component {
     const { formData } = this.props
     const { acceptPt1, acceptPt2, acceptPt3 } = this.state
     const style = LoanTermsOfUseStyle()
-
+    const termsOfUse = handleCopy()
     this.handleAcceptance()
 
     return (
@@ -137,7 +110,7 @@ class LoanTermsOfUse extends Component {
           Celsius Loan Terms and Conditions
         </CelText>
 
-        { this.renderToU1() }
+        { this.renderTermsOfUse(termsOfUse.termsPt1) }
 
         <Card
           color={ STYLES.COLORS.WHITE }
@@ -153,7 +126,7 @@ class LoanTermsOfUse extends Component {
           />
         </Card>
 
-        { this.renderToU2() }
+        { this.renderTermsOfUse(termsOfUse.termsPt2) }
         <Card
           color={ STYLES.COLORS.WHITE}
         >
@@ -167,7 +140,7 @@ class LoanTermsOfUse extends Component {
           />
         </Card>
 
-        { this.renderToU3() }
+        { this.renderTermsOfUse(termsOfUse.termsPt3) }
         <Card
           color={ STYLES.COLORS.WHITE }
         >

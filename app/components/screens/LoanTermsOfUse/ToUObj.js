@@ -93,7 +93,7 @@ const handleCopy = () => (
       },
       {
         title: `10. Refinancing`,
-        copy: `\\t(a) If, during the Loan Term, your LTV drops (e.g. where the Digital Asset posted as Collateral  increase in Fiat value) to under one half (1/2) of the initial LTV stated in the Term Sheet, you will be allowed to request the refinancing of your Loan, by any of the following manners:\n
+        copy: `\t\t(a) If, during the Loan Term, your LTV drops (e.g. where the Digital Asset posted as Collateral  increase in Fiat value) to under one half (1/2) of the initial LTV stated in the Term Sheet, you will be allowed to request the refinancing of your Loan, by any of the following manners:\n
           \t\t(i) Adjust your Collateral, by removing its excess to your Celsius Account (to earn interest in accordance with our Network Terms); and/or\n
           \t\t(ii) Borrow additional Fiat Money against the same Collateral.
           \t\t(Each, a “Refinancing Request”).
